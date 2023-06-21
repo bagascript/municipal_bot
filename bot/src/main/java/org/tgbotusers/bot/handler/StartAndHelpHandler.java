@@ -32,7 +32,8 @@ public class StartAndHelpHandler implements BotTextResponse {
         sendAnimation.setCaption("✋ Здравствуйте, " + userName + "!"
                 + "\n\n" + "\uD83E\uDD16 Я являюсь виртуальным помощником МО Васильевский."
                 + "\n\n" + "\uD83D\uDCC3 Выберите в меню команду или воспользуйтесь /help, " +
-                "чтобы я вывел список доступных услуг.");
+                "чтобы я вывел список доступных услуг." + "\n\n" + "⚠ Также, прошу обратить внимание на мой рабочий график," +
+                " выбрав раздел в меню или же нажав на кнопку /schedule:");
         sendAnimation.setReplyMarkup(startAndHelpButtons.getInlineKeyboardHelpButton());
         try {
             bot.execute(sendAnimation);
@@ -52,6 +53,18 @@ public class StartAndHelpHandler implements BotTextResponse {
         }
     }
 
+    private void sendBotSchedule(long chatId) {
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(SCHEDULE_TEXT);
+        message.setReplyMarkup(startAndHelpButtons. getInlineKeyboardBotScheduleButton());
+        try {
+            bot.execute(message);
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public void getStartBotCommand(long chatId, String userName) {
         startBot(chatId, userName);
     }
@@ -59,4 +72,9 @@ public class StartAndHelpHandler implements BotTextResponse {
     public void getHelpBotCommand(long chatId) {
         sendHelpText(chatId);
     }
+
+    public void getSendBotSchedule(long chatId) {
+        sendBotSchedule(chatId);
+    }
+
 }

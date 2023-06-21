@@ -41,29 +41,19 @@ public class DefaultHandler {
 
         HashMap<Long, String> statusMap = PersonalDataHandler.STATUS_MAP;
 
-        if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("ФИО")) {
+        if (statusMap.get(chatId).equals("ФИО")) {
             personalDataHandler.getEndRecordFullName(chatId, receivedMessage);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("ФИО подтверждено")) {
-            personalDataHandler.getSendFIOBadRequestErrorMsg(chatId);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Телефон")) {
+        } else if (statusMap.get(chatId).equals("Телефон")) {
             personalDataHandler.getEndRecordPhoneNumber(chatId, receivedMessage);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Номер телефона подтвержден")) {
-            personalDataHandler.getSendPhoneBadRequestErrorMsg(chatId);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Почта")) {
+        } else if (statusMap.get(chatId).equals("Почта")) {
             personalDataHandler.getEndRecordEmail(chatId, receivedMessage);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Почта подтверждена")) {
-            personalDataHandler.getSendEmailBadRequestErrorMsg(chatId);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Адрес")) {
+        } else if (statusMap.get(chatId).equals("Адрес")) {
             textAppealHandler.getEndRecordAddress(chatId, receivedMessage);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Адрес подтвержден")) {
-            textAppealHandler.getSendAddressBadRequestMsg(chatId);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Текст")) {
+        } else if (statusMap.get(chatId).equals("Текст")) {
             textAppealHandler.getEndRecordTextAppeal(chatId, receivedMessage);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Текст подтвержден")) {
-            textAppealHandler.getSendAppealTextBadRequestMsg(chatId);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Файл")) {
+        } else if (statusMap.get(chatId).equals("Файл")) {
             fileHandler.getEndRecordFile(chatId, receivedMessage, photo, document);
-        } else if (statusMap.containsKey(chatId) && statusMap.get(chatId).equals("Конец")) {
+        } else if (statusMap.get(chatId).equals("Конец")) {
             otherFileMsgSender.getSetFinalAppealStatus(chatId);
         }
     }

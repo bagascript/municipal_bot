@@ -43,17 +43,14 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         SendMessage sendFullNameMessage;
 
 
-        if (!STATUS_MAP.get(chatId).equals("Конец")) {
-            sendFullNameMessage = new SendMessage();
-            sendFullNameMessage.setChatId(chatId);
-            sendFullNameMessage.setText("Введите ваше ФИО:");
-            appealStatus = new AppealStatus();
-            appealStatus.setStatus("ФИО");
-            String status = appealStatus.getStatus();
-            STATUS_MAP.put(chatId, status);
-        } else {
-            sendFullNameMessage = sendButtonRequestErrorMsg(chatId);
-        }
+        sendFullNameMessage = new SendMessage();
+        sendFullNameMessage.setChatId(chatId);
+        sendFullNameMessage.setText("Введите ваше ФИО:");
+        appealStatus = new AppealStatus();
+        appealStatus.setStatus("ФИО");
+        String status = appealStatus.getStatus();
+        STATUS_MAP.put(chatId, status);
+
         try {
             bot.execute(sendFullNameMessage);
         } catch (TelegramApiException e) {
@@ -67,19 +64,10 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         if (receivedMessage.matches("(?<=\s|^)[А-Яа-яёЁ]+(\s+(?<=\s|^)[А-Яа-яёЁ]+)\\.?" +
                 "(\s+(?<=\s|^)[А-Яа-яёЁ]+)?\\.?")) {
 
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endFullNameMessage = new SendMessage();
-                endFullNameMessage.setChatId(chatId);
-                endFullNameMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить ФИО?");
-                endFullNameMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardFIOButton());
-
-                appealStatus = new AppealStatus();
-                appealStatus.setStatus("ФИО подтверждено");
-                String status = appealStatus.getStatus();
-                STATUS_MAP.put(chatId, status);
-            } else {
-                endFullNameMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endFullNameMessage = new SendMessage();
+            endFullNameMessage.setChatId(chatId);
+            endFullNameMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить ФИО?");
+            endFullNameMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardFIOButton());
 
             user.setChatId(chatId);
             user.setFullName(receivedMessage);
@@ -90,30 +78,14 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
             }
             user = new User();
         } else {
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endFullNameMessage = new SendMessage();
-                endFullNameMessage.setChatId(chatId);
-                endFullNameMessage.setText(ERROR_TEXT);
-                endFullNameMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardFIOErrorButton());
-            } else {
-                endFullNameMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endFullNameMessage = new SendMessage();
+            endFullNameMessage.setChatId(chatId);
+            endFullNameMessage.setText(ERROR_TEXT);
+            endFullNameMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardFIOErrorButton());
         }
 
         try {
             bot.execute(endFullNameMessage);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void sendFIOBadRequestErrorMsg(long chatId) {
-        SendMessage sendErrorMessage = new SendMessage();
-        sendErrorMessage.setChatId(chatId);
-        sendErrorMessage.setText(FIO_BAD_REQUEST_TEXT);
-        sendErrorMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardFIOButton());
-        try {
-            bot.execute(sendErrorMessage);
         } catch (TelegramApiException e) {
             log.error(e.getMessage());
         }
@@ -134,17 +106,14 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
     private void recordPhoneNumber(long chatId) {
         SendMessage sendPhoneNumberMessage;
 
-        if (!STATUS_MAP.get(chatId).equals("Конец")) {
-            sendPhoneNumberMessage = new SendMessage();
-            sendPhoneNumberMessage.setChatId(chatId);
-            sendPhoneNumberMessage.setText("Введите номер мобильного телефона:");
-            appealStatus = new AppealStatus();
-            appealStatus.setStatus("Телефон");
-            String status = appealStatus.getStatus();
-            STATUS_MAP.put(chatId, status);
-        } else {
-            sendPhoneNumberMessage = sendButtonRequestErrorMsg(chatId);
-        }
+        sendPhoneNumberMessage = new SendMessage();
+        sendPhoneNumberMessage.setChatId(chatId);
+        sendPhoneNumberMessage.setText("Введите номер мобильного телефона:");
+        appealStatus = new AppealStatus();
+        appealStatus.setStatus("Телефон");
+        String status = appealStatus.getStatus();
+        STATUS_MAP.put(chatId, status);
+
         try {
             bot.execute(sendPhoneNumberMessage);
         } catch (TelegramApiException e) {
@@ -156,19 +125,10 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         SendMessage endPhoneNumberMessage;
 
         if (receivedMessage.matches("\\+?[7|8]\\(?\\d{3}\\)?\\d{3}-?\\d{2}-?\\d{2}")) {
-
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endPhoneNumberMessage = new SendMessage();
-                endPhoneNumberMessage.setChatId(chatId);
-                endPhoneNumberMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить номер телефона?");
-                endPhoneNumberMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardPhoneButton());
-                appealStatus = new AppealStatus();
-                appealStatus.setStatus("Номер телефона подтвержден");
-                String status = appealStatus.getStatus();
-                STATUS_MAP.put(chatId, status);
-            } else {
-                endPhoneNumberMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endPhoneNumberMessage = new SendMessage();
+            endPhoneNumberMessage.setChatId(chatId);
+            endPhoneNumberMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить номер телефона?");
+            endPhoneNumberMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardPhoneButton());
 
             if (userDataMap.get(chatId).getChatId() == chatId) {
                 user.setChatId(userDataMap.get(chatId).getChatId());
@@ -177,16 +137,11 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
                 userDataMap.put(chatId, user);
             }
             user = new User();
-
         } else {
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endPhoneNumberMessage = new SendMessage();
-                endPhoneNumberMessage.setChatId(chatId);
-                endPhoneNumberMessage.setText(ERROR_TEXT);
-                endPhoneNumberMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardPhoneErrorButton());
-            } else {
-                endPhoneNumberMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endPhoneNumberMessage = new SendMessage();
+            endPhoneNumberMessage.setChatId(chatId);
+            endPhoneNumberMessage.setText(ERROR_TEXT);
+            endPhoneNumberMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardPhoneErrorButton());
         }
         try {
             bot.execute(endPhoneNumberMessage);
@@ -195,33 +150,15 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         }
     }
 
-    private void sendPhoneBadRequestErrorMsg(long chatId) {
-        SendMessage sendErrorMessage = new SendMessage();
-        sendErrorMessage.setChatId(chatId);
-        sendErrorMessage.setText(PHONE_BAD_REQUEST_TEXT);
-        sendErrorMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardPhoneButton());
-        try {
-            bot.execute(sendErrorMessage);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage());
-        }
-    }
-
     private void recordEmail(long chatId) {
         SendMessage sendEmailMessage;
-
-        if (!STATUS_MAP.get(chatId).equals("Конец")) {
-            sendEmailMessage = new SendMessage();
-            sendEmailMessage.setChatId(chatId);
-            sendEmailMessage.setText("Введите адрес электронной почты:");
-            appealStatus = new AppealStatus();
-            appealStatus.setStatus("Почта");
-            String status = appealStatus.getStatus();
-            STATUS_MAP.put(chatId, status);
-        } else {
-            sendEmailMessage = sendButtonRequestErrorMsg(chatId);
-        }
-
+        sendEmailMessage = new SendMessage();
+        sendEmailMessage.setChatId(chatId);
+        sendEmailMessage.setText("Введите адрес электронной почты:");
+        appealStatus = new AppealStatus();
+        appealStatus.setStatus("Почта");
+        String status = appealStatus.getStatus();
+        STATUS_MAP.put(chatId, status);
         try {
             bot.execute(sendEmailMessage);
         } catch (TelegramApiException e) {
@@ -233,19 +170,10 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         SendMessage endEmailMessage;
 
         if (receivedMessage.matches("^[A-Za-z0-9_.+%-]+@[A-Za-z0-9_.-]+\\.[a-zA-Z]{2,6}$")) {
-
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endEmailMessage = new SendMessage();
-                endEmailMessage.setChatId(chatId);
-                endEmailMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить адрес электронной почты?");
-                endEmailMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardEmailButton());
-                appealStatus = new AppealStatus();
-                appealStatus.setStatus("Почта подтверждена");
-                String status = appealStatus.getStatus();
-                STATUS_MAP.put(chatId, status);
-            } else {
-                endEmailMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endEmailMessage = new SendMessage();
+            endEmailMessage.setChatId(chatId);
+            endEmailMessage.setText("☑ Подтверждено.\n\nИдём дальше или хотите изменить адрес электронной почты?");
+            endEmailMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardEmailButton());
 
             if (userDataMap.get(chatId).getChatId() == chatId) {
                 user.setChatId(userDataMap.get(chatId).getChatId());
@@ -257,15 +185,10 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
             }
             user = new User();
         } else {
-
-            if (!STATUS_MAP.get(chatId).equals("Конец")) {
-                endEmailMessage = new SendMessage();
-                endEmailMessage.setChatId(chatId);
-                endEmailMessage.setText(ERROR_TEXT);
-                endEmailMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardEmailErrorButton());
-            } else {
-                endEmailMessage = sendButtonRequestErrorMsg(chatId);
-            }
+            endEmailMessage = new SendMessage();
+            endEmailMessage.setChatId(chatId);
+            endEmailMessage.setText(ERROR_TEXT);
+            endEmailMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardEmailErrorButton());
         }
         try {
             bot.execute(endEmailMessage);
@@ -274,39 +197,12 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         }
     }
 
-    private void sendEmailBadRequestErrorMsg(long chatId) {
-        SendMessage sendErrorMessage = new SendMessage();
-        sendErrorMessage.setChatId(chatId);
-        sendErrorMessage.setText(EMAIL_BAD_REQUEST_TEXT);
-        sendErrorMessage.setReplyMarkup(personalDataButtons.getInlineKeyboardEmailButton());
-        try {
-            bot.execute(sendErrorMessage);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private SendMessage sendButtonRequestErrorMsg(long chatId) {
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText("⚠ Что-то пошло не так! Обращение по номеру\n"
-                + "#" + appealDAO.getUserAppealNumber(TextAppealHandler.mapDataForFile.get(chatId).getId())
-                + " вы уже завершили, ожидайте по нему обратной связи.\n\n"
-                + "Для выхода к меню или создания новой заявки нажмите на соответствующую кнопку:");
-        message.setReplyMarkup(sendingAppealFilesButtons.getInlineKeyboardOfferMenuOrNewAppeal());
-        return message;
-    }
-
     public void getRecordFullName(long chatId) {
         recordFullName(chatId);
     }
 
     public void getEndRecordFullName(long chatId, String receivedMessage) {
         endRecordFullName(chatId, receivedMessage);
-    }
-
-    public void getSendFIOBadRequestErrorMsg(long chatId) {
-        sendFIOBadRequestErrorMsg(chatId);
     }
 
     public void getAskSkipOrRecordPhoneData(long chatId) {
@@ -321,10 +217,6 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
         endRecordPhoneNumber(chatId, receivedMessage);
     }
 
-    public void getSendPhoneBadRequestErrorMsg(long chatId) {
-        sendPhoneBadRequestErrorMsg(chatId);
-    }
-
     public void getRecordEmail(long chatId) {
         recordEmail(chatId);
     }
@@ -332,8 +224,15 @@ public class PersonalDataHandler implements ErrorTextResponse, BotTextResponse {
     public void getEndRecordEmail(long chatId, String receivedMessage) {
         endRecordEmail(chatId, receivedMessage);
     }
-
-    public void getSendEmailBadRequestErrorMsg(long chatId) {
-        sendEmailBadRequestErrorMsg(chatId);
-    }
 }
+
+//    private SendMessage sendButtonRequestErrorMsg(long chatId) {
+//        SendMessage message = new SendMessage();
+//        message.setChatId(chatId);
+//        message.setText("⚠ Что-то пошло не так! Обращение по номеру\n"
+//                + "#" + appealDAO.getUserAppealNumber(TextAppealHandler.mapDataForFile.get(chatId).getId())
+//                + " вы уже завершили, ожидайте по нему обратной связи.\n\n"
+//                + "Для выхода к меню или создания новой заявки нажмите на соответствующую кнопку:");
+//        message.setReplyMarkup(sendingAppealFilesButtons.getInlineKeyboardOfferMenuOrNewAppeal());
+//        return message;
+//    }

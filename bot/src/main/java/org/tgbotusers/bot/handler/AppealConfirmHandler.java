@@ -8,8 +8,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.tgbotusers.bot.Bot;
-import org.tgbotusers.bot.handler.personaldata.PersonalDataHandler;
-import org.tgbotusers.bot.handler.status.AppealStatus;
 import org.tgbotusers.bot.keyboard.AppealConfirmButtons;
 import org.tgbotusers.bot.text.BotTextResponse;
 
@@ -217,10 +215,6 @@ public class AppealConfirmHandler implements BotTextResponse {
                 "ознакомьтесь со следующей информацией:\n" +
                 BEFORE_APPEAL_INFORMATION_TEXT);
         message.setReplyMarkup(preparationButton.getInlineKeyboardCheckMarkButton());
-        AppealStatus appealStatus = new AppealStatus();
-        appealStatus.setStatus("Выбор темы обращения");
-        String status = appealStatus.getStatus();
-        PersonalDataHandler.STATUS_MAP.put(chatId, status);
         try {
             bot.execute(message);
         } catch (TelegramApiException e) {

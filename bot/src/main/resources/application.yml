@@ -1,5 +1,5 @@
 bot.name: VasilievskyBot
-bot.token: 6062376683:AAGo2MEutadW61gnMKR78nbga_s0QnkcYY8
+bot.token: 6062376683:AAEJZ1CvcC-_rEO5TxBWU7pvxtgtAtfBobk
 bot.chatId: 6062376683
 
 server:
@@ -14,5 +14,5 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
